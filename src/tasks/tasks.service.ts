@@ -18,4 +18,42 @@ export class TasksService {
   getTaskById(id: string): Task {
     return this.tasks.find((task) => task.id === id);
   }
+
+  deleteTaskById(id: string): void {
+    this.tasks = this.tasks.filter((task) => task.id !== id);
+  }
+
+  updateTask(
+    id: string,
+    titulo: string,
+    descricao: string,
+    status: 'PENDENTE' | 'FEITA',
+  ): Task {
+    const task = this.getTaskById(id);
+
+    if (!task) {
+      return null;
+    }
+
+    task.titulo = titulo;
+    task.descricao = descricao;
+    task.status = status;
+    return task;
+  }
+
+  patchTask(id: string, updates: Partial<Task>): Task {
+    const task = this.getTaskById(id);
+
+    if (!task) {
+      return null;
+    }
+
+    const allowedFields = ['titulo', 'descricao', 'status'];
+    Object.keys(updates).forEach((key) => {
+      if (allowedFields.includes(key)) {
+        task[key] = updates[key];
+      }
+      return task;
+    });
+  }
 }
